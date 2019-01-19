@@ -3,5 +3,5 @@
 
 Team 7461 Code
 
-This is the Binary Circles! (Team 7461) We are a rookie team, and this is where all of our code is(it is within the 2019BuildSeason Robot Code)
+This is the Binary Circles (Team 7461). We are a rookie team, and this is where all of our code is(it is within the 2019BuildSeason Robot Code)
 
