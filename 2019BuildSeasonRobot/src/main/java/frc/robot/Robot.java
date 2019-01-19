@@ -9,7 +9,10 @@ package frc.robot;
 
 import org.opencv.core.Rect;
 import org.opencv.imgproc.Imgproc;
-
+import edu.wpi.first.vision.VisionRunner;
+import edu.wpi.first.vision.VisionThread;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -17,6 +20,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.livewindow.*;
+import edu.wpi.cscore.UsbCamera;
+import frc.robot.grip.GripPipeline;
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import org.opencv.core.Mat;
+
 
 
 /**
@@ -30,13 +41,22 @@ public class Robot extends TimedRobot {
   public static DriveSubsystem m_subsystem = new DriveSubsystem();
   public static OI m_oi = new OI();
   public static DriveCommand drCommand = new DriveCommand();
-    
+  public static UsbCamera camera;
+
+  private static final int IMG_WIDTH = 200;
+	private static final int IMG_HEIGHT = 144;
+	
+	private VisionThread visionThread;
+	private double centerX = 0.0;
+	private DifferentialDrive robotDrive = m_subsystem.drive;
+  private final Object imgLock = new Object();
+  private GripPipeline pipe;
   
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  /**
+  /** 
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
@@ -46,6 +66,40 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new DriveCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    // camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+
+    
+
+   
+      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+      camera.setResolution(640, 480);
+
+      visionThread = new VisionThread(camera, pipe, pipeline -> {
+        if (!pipeline.filterContoursOutput().isEmpty()) {
+            Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+            synchronized (imgLock) {
+                centerX = r.x + (r.width / 2);
+            }
+        }
+    });
+    visionThread.start();
+    // visionThread.start();
+      
+    //   CvSink cvSink = CameraServer.getInstance().getVideo();
+    //   CvSource outputStream = CameraServer.getInstance().putVideo("0", 640, 480);
+      
+    //   Mat source = new Mat();
+    //   Mat output = new Mat();
+      
+    //   while(!Thread.interrupted()) {
+    //       cvSink.grabFrame(source);
+    //       Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
+    //       outputStream.putFrame(output);
+    //   }
+
+ 
+
   }
 
   /**
