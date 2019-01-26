@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveCommand;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.PneumaticsCommand;
+import frc.robot.subsystems.PneumaticsSubsystem;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.livewindow.*;
 import edu.wpi.cscore.UsbCamera;
@@ -41,7 +43,9 @@ public class Robot extends TimedRobot {
   public static DriveSubsystem m_subsystem = new DriveSubsystem();
   public static OI m_oi = new OI();
   public static DriveCommand drCommand = new DriveCommand();
+  public static PneumaticsSubsystem m_pnsub = new PneumaticsSubsystem();
   public static UsbCamera camera;
+  public static PneumaticsCommand m_pncomm = new PneumaticsCommand();
 
   private static final int IMG_WIDTH = 200;
 	private static final int IMG_HEIGHT = 144;
@@ -51,6 +55,8 @@ public class Robot extends TimedRobot {
 	private DifferentialDrive robotDrive = m_subsystem.drive;
   private final Object imgLock = new Object();
   private GripPipeline pipe;
+
+
   
 
   Command m_autonomousCommand;
@@ -182,6 +188,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     drCommand.start(); 
+
+   if(m_oi.js.getRawButton(1)) {
+      m_pncomm.start();
+   }
     
    
   }

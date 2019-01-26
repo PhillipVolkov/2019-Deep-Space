@@ -21,4 +21,5 @@ public class RobotMap {
     public static int LFMotor = 3;
     public static int LBMotor = 4;
     public static int drivejoystick = 0;
+    public static int armButton = 1;
 }

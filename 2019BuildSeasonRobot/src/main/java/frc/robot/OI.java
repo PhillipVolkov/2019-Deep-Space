@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -15,6 +16,8 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class OI {
     public XboxController contr = new XboxController(RobotMap.drivejoystick);
+    public Joystick js = new Joystick(0);
+    
     public double turnConstant = 0.5;
 
     public double getDriveSpeedRight() {
