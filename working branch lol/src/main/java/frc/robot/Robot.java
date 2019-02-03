@@ -15,7 +15,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.PneumaticsCommand;
 import frc.robot.commands.DriveCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.commands.AutoDriveCommand;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 /**
@@ -26,10 +28,12 @@ import frc.robot.subsystems.DriveSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static ExampleSubsystem m_subsystem = new ExampleSubsystem();
+  public static VisionSubsystem m_vissubsystem = new VisionSubsystem();
   public static PneumaticsSubsystem m_pnsub = new PneumaticsSubsystem();
   public static DriveSubsystem m_drivesub = new DriveSubsystem();
   public static DriveCommand m_drivecomm = new DriveCommand();
+  public static AutoDriveCommand m_autodrivecomm = new AutoDriveCommand();
+  public static VisionCommand m_viscomm = new VisionCommand();
   public static OI m_oi;
 
   Command m_autonomousCommand;
@@ -45,7 +49,8 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
-    SmartDashboard.putNumber("andreyIsCool", 124);
+
+    m_vissubsystem.startVision();
   }
 
   /**
@@ -108,9 +113,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-
-    
-    //SmartDashboard.putBoolean("a button", m_oi.contr.getAButton());
+    m_autodrivecomm.start();
   }
 
   @Override
@@ -131,12 +134,13 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     m_drivecomm.start();
+   // m_viscomm.start();
     if (m_oi.contr.getAButtonPressed()) {
      // m_pnsub.toggleArm();
     }
 
     if (m_oi.contr.getBButtonPressed()) {
-      m_pnsub.disableArm();
+      // m_pnsub.disableArm();
     }
     
   }

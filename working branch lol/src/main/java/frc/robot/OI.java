@@ -57,13 +57,21 @@ public class OI {
 
 
   // Return the magnitude (from -1 to 1) of the left stick's Y component.
-  public double getYMagnitudeOfLeftSide() {
-    return contr.getY(GenericHID.Hand.kLeft);
+  public double getTriggerMagnitude() {
+    return Math.pow((-contr.getTriggerAxis(GenericHID.Hand.kRight)+contr.getTriggerAxis(GenericHID.Hand.kLeft)), 3);
   }
+
+ 
 
   // Return the magnitude (from -1 to 1) of the right stick's Y component.
   public double getYMagnitudeOfRightSide() {
     return contr.getY(GenericHID.Hand.kRight);
+  }
+
+  // Return the magnitude (from -1 to 1) of the right stick's X component.
+  public double getXMagnitudeOfRightSide() {
+    return Math.pow(contr.getX(GenericHID.Hand.kLeft), 3);
+
   }
 
   // public double getZRotation() {
