@@ -18,7 +18,7 @@ public class PneumaticsSubsystem extends Subsystem {
   // here. Call these from Commands.
   // public DoubleSolenoid pDouble = new DoubleSolenoid(1, 2);
   
-  // private boolean arm_extended_flag = false;
+  private boolean arm_extended_flag = false;
 
   public void initialize() {
 
@@ -34,19 +34,19 @@ public class PneumaticsSubsystem extends Subsystem {
 
   }
 
-  // public void toggleArm() {
-  //     if (arm_extended_flag == true) {
-  //       //might need to change this from kReverse to kForward or kOff based on solenoid type
-  //       pDouble.set(DoubleSolenoid.Value.kReverse);
-  //     } else {
-  //       //might need to change this from kReverse to kForward or kOff based on solenoid type
-  //       pDouble.set(DoubleSolenoid.Value.kForward);
-  //     }
-  //     arm_extended_flag = !arm_extended_flag; 
-  // }
+  public void toggleArm() {
+      if (arm_extended_flag == true) {
+        //might need to change this from kReverse to kForward or kOff based on solenoid type
+        // pDouble.set(DoubleSolenoid.Value.kReverse);
+      } else {
+        //might need to change this from kReverse to kForward or kOff based on solenoid type
+        // pDouble.set(DoubleSolenoid.Value.kForward);
+      }
+      arm_extended_flag = !arm_extended_flag; 
+  }
 
   public void disableArm() {
-   // pDouble.set(DoubleSolenoid.Value.kOff);
+    // pDouble.set(DoubleSolenoid.Value.kOff);
   }
 
 

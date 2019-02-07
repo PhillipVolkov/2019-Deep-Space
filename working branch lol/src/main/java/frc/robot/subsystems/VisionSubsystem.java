@@ -35,6 +35,7 @@ public class VisionSubsystem extends Subsystem {
   private double centerX = 0.0;
   public int IMG_WIDTH = 400;
   public int IMG_HEIGHT = 600;
+  public CvSource cvOutput; 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
@@ -47,6 +48,7 @@ public class VisionSubsystem extends Subsystem {
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
     camera.setResolution(320, 240);
     camera.setFPS(25);
+    
     visionThread = new VisionThread(camera, pipe, pipeline -> {
       if (!pipeline.filterContoursOutput().isEmpty()) {
           Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
@@ -55,29 +57,31 @@ public class VisionSubsystem extends Subsystem {
           }
       }
     });
+    
   visionThread.setDaemon(true);
   visionThread.start();
   }
 
   public void useSee() {
   
+      SmartDashboard.putString("debugging message,", "hello uwu :3");
       CvSink cvSink = CameraServer.getInstance().getVideo();
-      CvSource cvOutput = CameraServer.getInstance().putVideo("processed stuff", IMG_WIDTH, IMG_HEIGHT);
-    	Mat mat = new Mat();
+     
+      Mat mat = new Mat();
+      
     	if (cvSink.grabFrame(mat) == 0)
-    	{
-        System.out.println(cvSink.getError());
-        
+    	{ 
+        SmartDashboard.putString("error", cvSink.getError());        
     	}
     	else
     	{
           
         	GripPipeline grip = new GripPipeline();
-     
         	grip.process(mat);
           System.out.println(grip.filterContoursOutput().size());
-          //SmartDashboard.putNumber("value", pipe.findContoursOutput().size());
-          cvOutput.putFrame(mat);
+          SmartDashboard.putString("detect", "mat detected");
+          // cvOutput.putFrame(mat);
     	}
   }
 }
+  

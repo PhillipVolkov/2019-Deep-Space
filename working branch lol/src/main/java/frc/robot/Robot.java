@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.PneumaticsSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -34,6 +37,7 @@ public class Robot extends TimedRobot {
   public static DriveCommand m_drivecomm = new DriveCommand();
   public static AutoDriveCommand m_autodrivecomm = new AutoDriveCommand();
   public static VisionCommand m_viscomm = new VisionCommand();
+  public static PneumaticsCommand m_pncomm = new PneumaticsCommand();
   public static OI m_oi;
 
   Command m_autonomousCommand;
@@ -134,13 +138,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
     m_drivecomm.start();
-   // m_viscomm.start();
+    // m_viscomm.start();
     if (m_oi.contr.getAButtonPressed()) {
-     // m_pnsub.toggleArm();
-    }
-
-    if (m_oi.contr.getBButtonPressed()) {
-      // m_pnsub.disableArm();
+    //  m_pncomm.execute();
     }
     
   }

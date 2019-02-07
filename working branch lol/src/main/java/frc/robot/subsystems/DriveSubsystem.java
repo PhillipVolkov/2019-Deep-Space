@@ -46,7 +46,7 @@ public class DriveSubsystem extends Subsystem {
   public double kI = 0.5;
   public double kD = 0.9;
 
-  public double sineM = 0;
+  // public double sineM = 0;
 
   //drive = new RobotDrive(victor_fl, victor_bl, victor_fr, victor_br);
 

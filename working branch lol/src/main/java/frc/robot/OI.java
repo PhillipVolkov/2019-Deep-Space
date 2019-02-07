@@ -57,6 +57,7 @@ public class OI {
 
 
   // Return the magnitude (from -1 to 1) of the left stick's Y component.
+  //get left trigger input minus right triger input to determine throttle forward/backward
   public double getTriggerMagnitude() {
     return Math.pow((-contr.getTriggerAxis(GenericHID.Hand.kRight)+contr.getTriggerAxis(GenericHID.Hand.kLeft)), 3);
   }
@@ -70,9 +71,12 @@ public class OI {
 
   // Return the magnitude (from -1 to 1) of the right stick's X component.
   public double getXMagnitudeOfRightSide() {
-    return Math.pow(contr.getX(GenericHID.Hand.kLeft), 3);
-
+    return Math.pow(contr.getX(GenericHID.Hand.kRight), 3);
   }
+  public double getMagnitudeOfLeftSide() {
+    return Math.pow(contr.getX(GenericHID.Hand.kLeft), 3);
+  }
+  
 
   // public double getZRotation() {
   //   return contr.getY(GenericHID.Hand.kL)

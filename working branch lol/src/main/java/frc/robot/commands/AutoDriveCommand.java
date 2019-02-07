@@ -54,9 +54,9 @@ public class AutoDriveCommand extends Command {
   protected void curveExecute() {
     
     
-    // Robot.m_drivesub.curvatureDrive(Math.sin(sineMovement),
-    // rotation * 0.00, // set to 0 to disable pid, breaking in gearboxes
-    // true);
+    Robot.m_drivesub.curvatureDrive(0,
+    rotation * 0.35, // set to 0 to disable pid, breaking in gearboxes
+    true);
   }
 
   // Make this return true when this Command no longer needs to run execute()
