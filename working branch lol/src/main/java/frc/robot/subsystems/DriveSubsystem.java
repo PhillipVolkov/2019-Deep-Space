@@ -42,10 +42,6 @@ public class DriveSubsystem extends Subsystem {
   DifferentialDrive d_drive = new DifferentialDrive(d_left, d_right);
   public AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
-  public double kP = 0.012;
-  public double kI = 0.5;
-  public double kD = 0.9;
-
   // public double sineM = 0;
 
   //drive = new RobotDrive(victor_fl, victor_bl, victor_fr, victor_br);
@@ -55,9 +51,11 @@ public class DriveSubsystem extends Subsystem {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
 
-    setDefaultCommand(new AutoDriveCommand());
+    setDefaultCommand(new DriveCommand());
     // Inverting these speed controller groups lets the xbox joystick
     // directions match the robot's direction.
+    victor_bl.follow(victor_fl);
+    victor_br.follow(victor_fr);
     d_left.setInverted(true);
     d_right.setInverted(true);
   }
@@ -69,11 +67,6 @@ public class DriveSubsystem extends Subsystem {
   public void curvatureDrive(double xSpeed, double zRotation, boolean isQuickTurn) {
    
     d_drive.curvatureDrive(xSpeed, zRotation, isQuickTurn);
-
-    // pid output
-    SmartDashboard.putNumber("kP", kP);
-    SmartDashboard.putNumber("kI", kI);
-    SmartDashboard.putNumber("kD", kD);
   }
 
  

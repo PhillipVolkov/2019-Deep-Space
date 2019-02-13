@@ -50,11 +50,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_oi = new OI();
-    m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
+    // m_chooser.setDefaultOption("Default Auto", new AutoDriveCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
 
-    m_vissubsystem.startVision();
+   // m_vissubsystem.startVision();
   }
 
   /**
@@ -96,7 +96,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+    // m_autonomousCommand = m_chooser.getSelected();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -106,9 +106,9 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.start();
+    // }
   }
 
   /**
@@ -117,7 +117,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-    m_autodrivecomm.start();
+   m_autodrivecomm.start();
   }
 
   @Override
@@ -126,9 +126,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    m_autodrivecomm.end();
   }
 
   /**
@@ -136,9 +134,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    // m_autodrivecomm.cancel();
     Scheduler.getInstance().run();
     m_drivecomm.start();
-    // m_viscomm.start();
+    //  m_viscomm.start();
     if (m_oi.contr.getAButtonPressed()) {
     //  m_pncomm.execute();
     }

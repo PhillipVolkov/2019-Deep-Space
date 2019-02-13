@@ -20,6 +20,7 @@ import frc.robot.grip.GripPipeline;
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import org.opencv.core.Mat;
+import frc.robot.Robot;
 
 
 /**
@@ -54,6 +55,7 @@ public class VisionSubsystem extends Subsystem {
           Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
           synchronized (imgLock) {
               centerX = r.x + (r.width / 2);
+              
           }
       }
     });
@@ -78,9 +80,12 @@ public class VisionSubsystem extends Subsystem {
           
         	GripPipeline grip = new GripPipeline();
         	grip.process(mat);
-          System.out.println(grip.filterContoursOutput().size());
+          //System.out.println(grip.filterContoursOutput().size());
           SmartDashboard.putString("detect", "mat detected");
           // cvOutput.putFrame(mat);
+          double turn = this.centerX - (IMG_WIDTH / 2);
+          
+
     	}
   }
 }

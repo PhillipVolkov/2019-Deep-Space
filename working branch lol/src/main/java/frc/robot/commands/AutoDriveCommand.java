@@ -21,17 +21,33 @@ import edu.wpi.first.wpilibj.PIDSource;
 public class AutoDriveCommand extends Command {
   static final double kTargetAngle = 180.0;
   private double rotation;
+  private double maxError = 0;
+  private boolean logError = false;
  
-  static double kP = Robot.m_drivesub.kP;
-  static double kI = Robot.m_drivesub.kI;
-  static double kD = Robot.m_drivesub.kD;
+  public double kP = 0.0056*0.6;
+  public double kI = 1.2*0.0056/(0.3);
+  public double kD = 3*0.0056*0.3/40;
+
   private PIDSource pidSource = Robot.m_drivesub.ahrs;
-  private final PIDController pidController = new PIDController(kP, kI, kD, pidSource, new PIDOutput() {
-    public void pidWrite(double input) {
-      rotation = input;
-      SmartDashboard.putNumber("rotation error", rotation);
-    }
-  });
+  private final PIDController pidController = new PIDController(kP, kI, kD, pidSource, Robot.m_drivesub.victor_fr);
+  // {
+  //   public void pidWrite(double input) {
+  //     rotation = input;
+
+  //     if (kTargetAngle - Robot.m_drivesub.ahrs.getAngle() < 5 && kTargetAngle - Robot.m_drivesub.ahrs.getAngle() > -5) {
+  //       logError = true;
+  //     }
+
+  //     if (kTargetAngle - Robot.m_drivesub.ahrs.getAngle() > maxError && logError == true) {
+  //       maxError = kTargetAngle - Robot.m_drivesub.ahrs.getAngle();
+  //     }
+
+  //     SmartDashboard.putNumber("rotation power", rotation);
+  //     SmartDashboard.putNumber("error", (kTargetAngle - Robot.m_drivesub.ahrs.getAngle()));
+  //     SmartDashboard.putNumber("max error", maxError);
+  //   }
+  // };
+
 
   public AutoDriveCommand() {
     // Use requires() here to declare subsystem dependencies
@@ -58,16 +74,24 @@ public class AutoDriveCommand extends Command {
     rotation * 0.35, // set to 0 to disable pid, breaking in gearboxes
     true);
   }
+  protected void tankExecute() {
+    
+    
+    Robot.m_drivesub.tankDrive(0, 0);
+  }
+
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
-  }
-
+   
+      return false;
+      
+  }  
   // Called once after isFinished returns true
   @Override
-  protected void end() {
+  public void end() {
+    pidController.disable();
   }
 
   // Called when another command which requires one or more of the same

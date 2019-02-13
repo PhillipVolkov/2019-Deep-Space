@@ -47,7 +47,6 @@ public class DriveCommand extends Command {
   }
 
   protected void curveExecute() {
-   
     Robot.m_drivesub.curvatureDrive(Robot.m_oi.getTriggerMagnitude(),
     Robot.m_oi.getXMagnitudeOfRightSide() * -1,
     Robot.m_oi.contr.getXButton());
