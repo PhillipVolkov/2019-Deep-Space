@@ -7,30 +7,21 @@
 
 package frc.robot;
 
-import org.opencv.core.Rect;
-import org.opencv.imgproc.Imgproc;
-import edu.wpi.first.vision.VisionRunner;
-import edu.wpi.first.vision.VisionThread;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.DriveCommand;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.PneumaticsCommand;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.AutoDriveCommand;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.PneumaticsSubsystem;
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj.livewindow.*;
-import edu.wpi.cscore.UsbCamera;
-import frc.robot.grip.GripPipeline;
-import edu.wpi.cscore.CvSink;
-import edu.wpi.cscore.CvSource;
-import org.opencv.core.Mat;
-
-
+import frc.robot.subsystems.DriveSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -40,72 +31,30 @@ import org.opencv.core.Mat;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static DriveSubsystem m_subsystem = new DriveSubsystem();
-  public static OI m_oi = new OI();
-  public static DriveCommand drCommand = new DriveCommand();
+  public static VisionSubsystem m_vissubsystem = new VisionSubsystem();
   public static PneumaticsSubsystem m_pnsub = new PneumaticsSubsystem();
-  public static UsbCamera camera;
+  public static DriveSubsystem m_drivesub = new DriveSubsystem();
+  public static DriveCommand m_drivecomm = new DriveCommand();
+  public static AutoDriveCommand m_autodrivecomm = new AutoDriveCommand();
+  public static VisionCommand m_viscomm = new VisionCommand();
   public static PneumaticsCommand m_pncomm = new PneumaticsCommand();
-
-  private static final int IMG_WIDTH = 200;
-	private static final int IMG_HEIGHT = 144;
-	
-	private VisionThread visionThread;
-	private double centerX = 0.0;
-	private DifferentialDrive robotDrive = m_subsystem.drive;
-  private final Object imgLock = new Object();
-  private GripPipeline pipe;
-
-
-  
+  public static OI m_oi;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  /** 
+  /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
   @Override
   public void robotInit() {
     m_oi = new OI();
-    m_chooser.setDefaultOption("Default Auto", new DriveCommand());
+    // m_chooser.setDefaultOption("Default Auto", new AutoDriveCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
-    // UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    // camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
 
-    
-
-   
-      UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-      camera.setResolution(640, 480);
-
-      visionThread = new VisionThread(camera, pipe, pipeline -> {
-        if (!pipeline.filterContoursOutput().isEmpty()) {
-            Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-            synchronized (imgLock) {
-                centerX = r.x + (r.width / 2);
-            }
-        }
-    });
-    visionThread.start();
-    // visionThread.start();
-      
-    //   CvSink cvSink = CameraServer.getInstance().getVideo();
-    //   CvSource outputStream = CameraServer.getInstance().putVideo("0", 640, 480);
-      
-    //   Mat source = new Mat();
-    //   Mat output = new Mat();
-      
-    //   while(!Thread.interrupted()) {
-    //       cvSink.grabFrame(source);
-    //       Imgproc.cvtColor(source, output, Imgproc.COLOR_BGR2GRAY);
-    //       outputStream.putFrame(output);
-    //   }
-
- 
-
+   // m_vissubsystem.startVision();
   }
 
   /**
@@ -147,7 +96,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+    // m_autonomousCommand = m_chooser.getSelected();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -157,9 +106,9 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.start();
-    }
+    // if (m_autonomousCommand != null) {
+    //   m_autonomousCommand.start();
+    // }
   }
 
   /**
@@ -168,6 +117,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+   m_autodrivecomm.start();
   }
 
   @Override
@@ -176,9 +126,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.cancel();
-    }
+    m_autodrivecomm.end();
   }
 
   /**
@@ -186,14 +134,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    // m_autodrivecomm.cancel();
     Scheduler.getInstance().run();
-    drCommand.start(); 
-
-   if(m_oi.js.getRawButton(1)) {
-      m_pncomm.start();
-   }
+    m_drivecomm.start();
+    //  m_viscomm.start();
+    if (m_oi.contr.getAButtonPressed()) {
+    //  m_pncomm.execute();
+    }
     
-   
   }
 
   /**

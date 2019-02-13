@@ -13,10 +13,10 @@ import frc.robot.Robot;
 /**
  * An example command.  You can replace me with your own command.
  */
-public class DriveCommand extends Command {
-  public DriveCommand() {
+public class VisionCommand extends Command {
+  public VisionCommand() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_subsystem);
+    requires(Robot.m_vissubsystem);
   }
 
   // Called just before this Command runs the first time
@@ -26,8 +26,8 @@ public class DriveCommand extends Command {
 
   // Called repeatedly when this Command is scheduled to run
   @Override
-  protected void execute() {
-    Robot.m_subsystem.tankDrive(Robot.m_oi.getDriveSpeedLeft(), Robot.m_oi.getDriveSpeedRight());
+  public void execute() {
+    Robot.m_vissubsystem.useSee();
   }
 
   // Make this return true when this Command no longer needs to run execute()
