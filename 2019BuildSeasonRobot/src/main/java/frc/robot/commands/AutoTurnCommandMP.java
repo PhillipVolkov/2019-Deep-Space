@@ -1,6 +1,6 @@
 
 import com.kauailabs.navx.frc.AHRS;
-public class AutoTurnCommandMP extends Command {
+public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput{
     private double rampRate;
     private double cruiseVelocity;
     private double currentVelocity;
@@ -9,6 +9,7 @@ public class AutoTurnCommandMP extends Command {
     private double target;
     private int stage;
     private double time;
+    private PIDSourceType
     public AutoTurnCommandMP(double targetRotation, double cruise, double ramp) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.m_subsystem);
