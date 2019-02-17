@@ -60,6 +60,8 @@ public class DriveSubsystem extends Subsystem {
     victor_br.follow(talon_fr);
     d_left.setInverted(true);
     d_right.setInverted(true);
+
+    arbitraryMotor.follow(talon_fl);
   }
   
   public void tankDrive(double leftSpeed, double rightSpeed) {
