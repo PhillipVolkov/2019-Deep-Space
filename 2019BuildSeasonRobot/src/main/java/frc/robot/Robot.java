@@ -16,12 +16,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.commands.PneumaticsCommand;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.AutoDriveCommand;
+import frc.robot.commands.AutoTurnCommandMP;
 import frc.robot.subsystems.VisionSubsystem;
 import frc.robot.commands.VisionCommand;
 import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import edu.wpi.first.wpilibj.GenericHID;
+import frc.robot.commands.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,11 +40,16 @@ import frc.robot.subsystems.DriveSubsystem;
 public class Robot extends TimedRobot {
   public static VisionSubsystem m_vissubsystem = new VisionSubsystem();
   public static PneumaticsSubsystem m_pnsub = new PneumaticsSubsystem();
+  public static IntakeSubsystem m_intakesub = new IntakeSubsystem();
   public static DriveSubsystem m_drivesub = new DriveSubsystem();
+  public static ArmSubsystem m_armsubsystem = new ArmSubsystem();
   public static DriveCommand m_drivecomm = new DriveCommand();
   public static AutoDriveCommand m_autodrivecomm = new AutoDriveCommand();
   public static VisionCommand m_viscomm = new VisionCommand();
   public static PneumaticsCommand m_pncomm = new PneumaticsCommand();
+  public static IntakeCommand m_intakecomm = new IntakeCommand();
+  public static ArmCommand m_armcomm = new ArmCommand();
+  public static AutoTurnCommandMP m_autoturncomm = new AutoTurnCommandMP(90, 5, 0.1);
   public static OI m_oi;
 
   Command m_autonomousCommand;
@@ -54,7 +66,7 @@ public class Robot extends TimedRobot {
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
 
-   m_vissubsystem.startVision();
+   
   }
 
   /**
@@ -109,6 +121,7 @@ public class Robot extends TimedRobot {
     // if (m_autonomousCommand != null) {
     //   m_autonomousCommand.start();
     // }
+
   }
 
   /**
@@ -117,7 +130,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-   m_autodrivecomm.start();
+    m_autoturncomm.start();
   }
 
   @Override
@@ -126,7 +139,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    m_autodrivecomm.end();
+    
   }
 
   /**
@@ -138,8 +151,14 @@ public class Robot extends TimedRobot {
     Scheduler.getInstance().run();
     m_drivecomm.start();
     //  m_viscomm.start();
-    if (m_oi.contr.getAButtonPressed()) {
+
+    m_intakecomm.start();
+
+    if (m_oi.contr.getYButtonPressed()) {
     //  m_pncomm.execute();
+    }
+    else if(m_oi.contr.getBumperPressed(GenericHID.Hand.kRight)) {
+      m_armcomm.start();
     }
     
   }

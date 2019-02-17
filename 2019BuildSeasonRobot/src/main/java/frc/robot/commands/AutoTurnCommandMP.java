@@ -1,6 +1,22 @@
+package frc.robot.commands;
+
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.PneumaticsCommand;
+import frc.robot.commands.DriveCommand;
+import frc.robot.commands.AutoDriveCommand;
+import frc.robot.subsystems.VisionSubsystem;
+import frc.robot.commands.VisionCommand;
+import frc.robot.subsystems.PneumaticsSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
+import edu.wpi.first.wpilibj.*;
+import frc.robot.Robot;
 
 import com.kauailabs.navx.frc.AHRS;
-public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput{
+public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
     private double rampRate;
     private double cruiseVelocity;
     private double currentVelocity;
@@ -9,10 +25,15 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput{
     private double target;
     private int stage;
     private double time;
-    private PIDSourceType
+    public PIDController turnPID = new PIDController(0.0, 0.0, 0.0, this, this, 0.1);
+    private AHRS ahrs = Robot.m_drivesub.ahrs;
+    private double rate;
+    private double velocityError;
+    
     public AutoTurnCommandMP(double targetRotation, double cruise, double ramp) {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.m_subsystem);
+        requires(Robot.m_drivesub);
+     
         rampRate = ramp;
         cruiseVelocity = cruise;
         currentVelocity = 0.0;
@@ -23,19 +44,38 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput{
         stage = 1;
     }
 
+    public double pidGet() {
+        return ahrs.getRate();
+    }
+
+    public void pidWrite(double input) {
+        velocityError = input;
+    }
+
+    public PIDSourceType getPIDSourceType() {
+        return PIDSourceType.kDisplacement;
+    }
+
+
+    public void setPIDSourceType(PIDSourceType source) {
+        source = PIDSourceType.kDisplacement;
+    }
     // Called just before this Command runs the first time
-    @Override
+    // @Override
     protected void initialize() {
+        setPIDSourceType(PIDSourceType.kDisplacement);
+        turnPID.setContinuous(true);
+        turnPID.enable();
     }
 
     // Called repeatedly when this Command is scheduled to run
-    @Override
+    // @Override
     protected void execute() {
         if(stage == 1)
         {
             time += 1.0;
             currentVelocity = currentVelocity + (rampRate/50);
-            //setsetpoint
+            turnPID.setSetpoint(currentVelocity);
             if(time > rampTicks)
             {
                 stage = 2;
@@ -46,37 +86,38 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput{
             time += 1.0;
             if(time >= cruiseTicks + rampTicks)
             {
-                stage == 3;
+                stage = 3;
             }
         }
         else if(stage == 3)
         {
             time += 1.0;
             currentVelocity = currentVelocity - (rampRate/50);
-            //setsetpoint
+            turnPID.setSetpoint(currentVelocity);
             if(time > ((2 *rampTicks) + cruiseTicks))
             {
                 stage = 4;
             }
         }
-        @// TODO: 2/12/2019 SET SETPOINT OF VELO PID TO TARGET VELOCITY
+        Robot.m_drivesub. curvatureDrive(0, velocityError, true);
 
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    @Override
+
     protected boolean isFinished() {
         return (stage == 4);
     }
 
     // Called once after isFinished returns true
-    @Override
+    // @Override
     protected void end() {
+        turnPID.disable();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
-    @Override
+    // @Override
     protected void interrupted() {
     }
 }

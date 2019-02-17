@@ -21,6 +21,7 @@ import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
 import org.opencv.core.Mat;
 import frc.robot.Robot;
+import frc.robot.commands.VisionCommand;
 
 
 /**
@@ -36,17 +37,17 @@ public class VisionSubsystem extends Subsystem {
   private double centerX = 0.0;
   public int IMG_WIDTH = 320;
   public int IMG_HEIGHT = 240;
-  // public CvSource cvOutput; 
+  public CvSource cvOutput; 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new VisionCommand());
   }
 
-  
-  public void startVision() {
-    
+  public VisionSubsystem() {
+      
     UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    cvOutput = CameraServer.getInstance().putVideo("processed video", IMG_WIDTH, IMG_HEIGHT);
     camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
     camera.setFPS(25);
     
@@ -62,6 +63,27 @@ public class VisionSubsystem extends Subsystem {
     
   visionThread.setDaemon(true);
   visionThread.start();
+  }
+
+  
+  public void startVision() {
+    
+  //   UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+  //   camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+  //   camera.setFPS(25);
+    
+  //   visionThread = new VisionThread(camera, pipe, pipeline -> {
+  //     if (!pipeline.filterContoursOutput().isEmpty()) {
+  //         Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+  //         synchronized (imgLock) {
+  //             centerX = r.x + (r.width / 2);
+              
+  //         }
+  //     }
+  //   });
+    
+  // visionThread.setDaemon(true);
+  // visionThread.start();
   }
 
   public void useSee() {

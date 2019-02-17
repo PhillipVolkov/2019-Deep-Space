@@ -9,18 +9,14 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.GenericHID;
 
 /**
  * An example command.  You can replace me with your own command.
  */
-public class DriveCommand extends Command {
-
-  // private double sineMovement = Robot.m_drivesub.sineM; // temp
-  public DriveCommand() {
+public class IntakeCommand extends Command {
+  public IntakeCommand() {
     // Use requires() here to declare subsystem dependencies
-    requires(Robot.m_drivesub);
+    requires(Robot.m_intakesub);
   }
 
   // Called just before this Command runs the first time
@@ -31,29 +27,13 @@ public class DriveCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    curveExecute();
-  }
-
-  protected void tankExecute() {
-    double lmag = Robot.m_oi.getTriggerMagnitude();
-    double rmag = Robot.m_oi.getYMagnitudeOfRightSide();
-    Robot.m_drivesub.tankDrive(lmag, rmag);
-    SmartDashboard.putNumber("TankDriveDebug-l", lmag);
-    SmartDashboard.putNumber("TankDriveDebug-r", rmag);
-  }
-
-  protected void curveExecute() {
-    Robot.m_drivesub.curvatureDrive(Robot.m_oi.getTriggerMagnitude(),
-    Robot.m_oi.getXMagnitudeOfRightSide() * -1,
-    Robot.m_oi.contr.getXButton());
-
-    // Robot.m_drivesub.curvatureDrive(Math.sin(sineMovement),
-    //  0.00, // set to 0 to disable pid, breaking in gearboxes
-    // true);
-  }
-
-  protected void curveReduced() {
-
+    if (Robot.m_oi.contr.getAButtonPressed()) {
+      Robot.m_intakesub.succ();
+    } else if (Robot.m_oi.contr.getBButtonPressed()) {
+      Robot.m_intakesub.spit();
+    } else {
+      Robot.m_intakesub.atRest();
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

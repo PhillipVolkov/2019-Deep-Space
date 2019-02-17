@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.robot.RobotMap;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
@@ -31,20 +32,20 @@ public class DriveSubsystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  public WPI_VictorSPX victor_fl = new WPI_VictorSPX(RobotMap.victor_fl);
+  public WPI_TalonSRX talon_fl = new WPI_TalonSRX(RobotMap.talon_fl);
   public WPI_VictorSPX victor_bl = new WPI_VictorSPX(RobotMap.victor_bl);
-  SpeedControllerGroup d_left = new SpeedControllerGroup(victor_fl, victor_bl);
+  SpeedControllerGroup d_left = new SpeedControllerGroup(talon_fl, victor_bl);
 
-  public WPI_VictorSPX victor_fr = new WPI_VictorSPX(RobotMap.victor_fr);
+  public WPI_TalonSRX talon_fr = new WPI_TalonSRX(RobotMap.talon_fr);
   public WPI_VictorSPX victor_br = new WPI_VictorSPX(RobotMap.victor_br);
-  SpeedControllerGroup d_right = new SpeedControllerGroup(victor_fr, victor_br);
+  SpeedControllerGroup d_right = new SpeedControllerGroup(talon_fr, victor_br);
 
   DifferentialDrive d_drive = new DifferentialDrive(d_left, d_right);
   public AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
   // public double sineM = 0;
 
-  //drive = new RobotDrive(victor_fl, victor_bl, victor_fr, victor_br);
+  //drive = new RobotDrive(talon_fl, talon_bl, talon_fr, talon_br);
 
   @Override
   public void initDefaultCommand() {
@@ -54,8 +55,8 @@ public class DriveSubsystem extends Subsystem {
     setDefaultCommand(new DriveCommand());
     // Inverting these speed controller groups lets the xbox joystick
     // directions match the robot's direction.
-    victor_bl.follow(victor_fl);
-    victor_br.follow(victor_fr);
+    victor_bl.follow(talon_fl);
+    victor_br.follow(talon_fr);
     d_left.setInverted(true);
     d_right.setInverted(true);
   }
@@ -65,7 +66,6 @@ public class DriveSubsystem extends Subsystem {
   }
 
   public void curvatureDrive(double xSpeed, double zRotation, boolean isQuickTurn) {
-   
     d_drive.curvatureDrive(xSpeed, zRotation, isQuickTurn);
   }
 

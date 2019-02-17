@@ -37,10 +37,10 @@ public class PneumaticsSubsystem extends Subsystem {
   public void toggleArm() {
       if (arm_extended_flag == true) {
         //might need to change this from kReverse to kForward or kOff based on solenoid type
-        // pDouble.set(DoubleSolenoid.Value.kReverse);
+        //pDouble.set(DoubleSolenoid.Value.kReverse);
       } else {
         //might need to change this from kReverse to kForward or kOff based on solenoid type
-        // pDouble.set(DoubleSolenoid.Value.kForward);
+        //pDouble.set(DoubleSolenoid.Value.kForward);
       }
       arm_extended_flag = !arm_extended_flag; 
   }
