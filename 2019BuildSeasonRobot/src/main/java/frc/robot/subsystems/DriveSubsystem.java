@@ -43,7 +43,8 @@ public class DriveSubsystem extends Subsystem {
   DifferentialDrive d_drive = new DifferentialDrive(d_left, d_right);
   public AHRS ahrs = new AHRS(SPI.Port.kMXP);
 
-  // public double sineM = 0;
+  public double sineM = 0;
+  public WPI_TalonSRX arbitraryMotor = new WPI_TalonSRX(3);
 
   //drive = new RobotDrive(talon_fl, talon_bl, talon_fr, talon_br);
 

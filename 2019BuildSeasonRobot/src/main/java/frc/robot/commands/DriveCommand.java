@@ -17,7 +17,8 @@ import edu.wpi.first.wpilibj.GenericHID;
  */
 public class DriveCommand extends Command {
 
-  // private double sineMovement = Robot.m_drivesub.sineM; // temp
+  private double sineMovement = Robot.m_drivesub.sineM; // temp
+  
   public DriveCommand() {
     // Use requires() here to declare subsystem dependencies
     requires(Robot.m_drivesub);
@@ -43,13 +44,13 @@ public class DriveCommand extends Command {
   }
 
   protected void curveExecute() {
-    Robot.m_drivesub.curvatureDrive(Robot.m_oi.getTriggerMagnitude(),
-    Robot.m_oi.getXMagnitudeOfRightSide() * -1,
-    Robot.m_oi.contr.getXButton());
+    //Robot.m_drivesub.curvatureDrive(Robot.m_oi.getTriggerMagnitude(),
+    //Robot.m_oi.getXMagnitudeOfRightSide() * -1,
+    //Robot.m_oi.contr.getXButton());
 
-    // Robot.m_drivesub.curvatureDrive(Math.sin(sineMovement),
-    //  0.00, // set to 0 to disable pid, breaking in gearboxes
-    // true);
+    Robot.m_drivesub.curvatureDrive(Math.sin(sineMovement),
+    0.00, // set to 0 to disable pid, breaking in gearboxes
+    true);
   }
 
   protected void curveReduced() {
