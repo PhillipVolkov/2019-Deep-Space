@@ -44,8 +44,7 @@ public class ArmSubsystem extends Subsystem{
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
   }
-
-  public void startTheStuff(double randomValue) {
+  public void setCruiseAndAcceleration(int accel, int cruise) {
     armL.follow(armR);
     armL.setInverted(true);
 
@@ -54,19 +53,24 @@ public class ArmSubsystem extends Subsystem{
     armR.config_kI(0, kI);
     armR.config_kD(0, kD);
     armR.config_kF(0, kF);
-    armR.configMotionAcceleration(10);
-    armR.configMotionCruiseVelocity(5);
+    armR.configMotionAcceleration(accel);
+    armR.configMotionCruiseVelocity(cruise);
   }
 
-  public void toggleArm() {
+  public void toggleArm(double turnPosition) {
     if (armToggle == true) {
-      armR.set(ControlMode.MotionMagic, 20);
+      armR.set(ControlMode.MotionMagic, turnPosition);
     } else {
       armR.set(ControlMode.MotionMagic, 0);
     }
 
     armToggle = !armToggle;
   }
+
+  public void turnArm() {
+    armR.set(Robot.m_oi.getYMagnitudeOfRightSide());
+  }
+
 
 
 

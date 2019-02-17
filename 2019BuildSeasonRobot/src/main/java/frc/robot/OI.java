@@ -64,16 +64,13 @@ public class OI {
 
  
 
-  // Return the magnitude (from -1 to 1) of the right stick's Y component.
-  public double getYMagnitudeOfRightSide() {
-    return contr.getY(GenericHID.Hand.kRight);
-  }
+  // Return the magnitude (from -1 to 1) of the right stick's Y component
 
   // Return the magnitude (from -1 to 1) of the right stick's X component.
-  public double getXMagnitudeOfRightSide() {
-    return Math.pow(contr.getX(GenericHID.Hand.kRight), 3);
+  public double getYMagnitudeOfRightSide() {
+    return Math.pow(contr.getY(GenericHID.Hand.kRight), 3);
   }
-  public double getMagnitudeOfLeftSide() {
+  public double getXMagnitudeOfLeftSide() {
     return Math.pow(contr.getX(GenericHID.Hand.kLeft), 3);
   }
   

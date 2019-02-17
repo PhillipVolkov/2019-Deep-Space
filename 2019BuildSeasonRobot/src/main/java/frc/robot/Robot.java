@@ -39,17 +39,23 @@ import frc.robot.commands.*;
  */
 public class Robot extends TimedRobot {
   public static VisionSubsystem m_vissubsystem = new VisionSubsystem();
-  public static PneumaticsSubsystem m_pnsub = new PneumaticsSubsystem();
-  public static IntakeSubsystem m_intakesub = new IntakeSubsystem();
-  public static DriveSubsystem m_drivesub = new DriveSubsystem();
-  public static ArmSubsystem m_armsubsystem = new ArmSubsystem();
-  public static DriveCommand m_drivecomm = new DriveCommand();
-  public static AutoDriveCommand m_autodrivecomm = new AutoDriveCommand();
   public static VisionCommand m_viscomm = new VisionCommand();
+
+  public static PneumaticsSubsystem m_pnsub = new PneumaticsSubsystem();
   public static PneumaticsCommand m_pncomm = new PneumaticsCommand();
+
+  public static IntakeSubsystem m_intakesub = new IntakeSubsystem();
   public static IntakeCommand m_intakecomm = new IntakeCommand();
+  
+  public static DriveSubsystem m_drivesub = new DriveSubsystem();
+  public static DriveCommand m_drivecomm = new DriveCommand();
+
+  public static ArmSubsystem m_armsubsystem = new ArmSubsystem();
   public static ArmCommand m_armcomm = new ArmCommand();
+
+  public static AutoDriveCommand m_autodrivecomm = new AutoDriveCommand();
   public static AutoTurnCommandMP m_autoturncomm = new AutoTurnCommandMP(90, 5, 0.1);
+
   public static OI m_oi;
 
   Command m_autonomousCommand;
@@ -147,7 +153,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    // m_autodrivecomm.cancel();
+    m_autoturncomm.cancel();
     Scheduler.getInstance().run();
     m_drivecomm.start();
     //  m_viscomm.start();
@@ -157,9 +163,7 @@ public class Robot extends TimedRobot {
     if (m_oi.contr.getYButtonPressed()) {
     //  m_pncomm.execute();
     }
-    else if(m_oi.contr.getBumperPressed(GenericHID.Hand.kRight)) {
-      m_armcomm.start();
-    }
+    m_armcomm.start();
     
   }
 

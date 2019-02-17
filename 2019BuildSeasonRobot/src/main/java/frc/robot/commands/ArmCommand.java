@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import edu.wpi.first.wpilibj.GenericHID;
 
 /**
  * An example command.  You can replace me with your own command.
@@ -22,13 +23,16 @@ public class ArmCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.m_armsubsystem.startTheStuff(0);
+    Robot.m_armsubsystem.setCruiseAndAcceleration(10, 5);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_armsubsystem.toggleArm();
+    Robot.m_armsubsystem.turnArm();
+    if(Robot.m_oi.contr.getBumperPressed(GenericHID.Hand.kRight)) {
+      Robot.m_armsubsystem.toggleArm(20);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

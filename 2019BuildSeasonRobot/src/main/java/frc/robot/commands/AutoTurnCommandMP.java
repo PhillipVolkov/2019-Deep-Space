@@ -84,6 +84,7 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
         else if(stage == 2)
         {
             time += 1.0;
+            turnPID.setSetpoint(currentVelocity);
             if(time >= cruiseTicks + rampTicks)
             {
                 stage = 3;
