@@ -31,7 +31,8 @@ public class ArmSubsystem extends Subsystem{
   private double kD;
   private double kF;
   public int kIzone;
-	public double kPeakOutput;
+  public double kPeakOutput;
+  public boolean armToggle = false;
 
   private PIDSource source;
   private PIDOutput output;
@@ -57,10 +58,15 @@ public class ArmSubsystem extends Subsystem{
     armR.configMotionCruiseVelocity(5);
   }
 
-  public void goToFiveDegrees() {
-    armR.set(ControlMode.MotionMagic, 20);
-  }
+  public void toggleArm() {
+    if (armToggle == true) {
+      armR.set(ControlMode.MotionMagic, 20);
+    } else {
+      armR.set(ControlMode.MotionMagic, 0);
+    }
 
+    armToggle = !armToggle;
+  }
 
 
 

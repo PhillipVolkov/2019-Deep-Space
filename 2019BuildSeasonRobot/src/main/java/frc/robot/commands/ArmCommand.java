@@ -28,7 +28,7 @@ public class ArmCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.m_armsubsystem.goToFiveDegrees();
+    Robot.m_armsubsystem.toggleArm();
   }
 
   // Make this return true when this Command no longer needs to run execute()
