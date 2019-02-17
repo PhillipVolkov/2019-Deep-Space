@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.GenericHID;
  */
 public class DriveCommand extends Command {
 
-  private double sineMovement = Robot.m_drivesub.sineM; // temp
+  private double sineMovement = 0; // set to 0 to start out (temp)
   
   public DriveCommand() {
     // Use requires() here to declare subsystem dependencies
@@ -32,6 +32,7 @@ public class DriveCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    sineMovement += Math.PI / 400; //add pi/400 every time execute is called to simulate sin curve movement (temp)
     curveExecute();
   }
 
