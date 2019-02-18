@@ -30,14 +30,21 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
     private double rate;
     private double velocityError;
     
-    public AutoTurnCommandMP(double targetRotation, double cruise, double ramp) {
+    public AutoTurnCommandMP(double cruise, double ramp) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.m_drivesub);
+
+        //if (ahrs.getAngle() >= 0) {
+        //    target = ahrs.getAngle() - 180;
+        //} else {
+         //   target = ahrs.getAngle() + 180;
+        //}
+
+        target = 180;
      
         rampRate = ramp;
         cruiseVelocity = cruise;
         currentVelocity = 0.0;
-        target = targetRotation;
         rampTicks = cruiseVelocity * 50/rampRate;
         cruiseTicks = 50 * ((target - ((rampTicks/50) * cruiseVelocity))/cruiseVelocity);
         time = 0.0;
@@ -64,7 +71,7 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
     // @Override
     protected void initialize() {
         setPIDSourceType(PIDSourceType.kDisplacement);
-         turnPID.setInputRange(-1, 1);
+        turnPID.setInputRange(-1, 1);
         turnPID.setContinuous(true);
         turnPID.enable();
     }

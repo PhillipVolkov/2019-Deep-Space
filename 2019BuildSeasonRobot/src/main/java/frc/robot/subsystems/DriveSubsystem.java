@@ -42,9 +42,9 @@ public class DriveSubsystem extends Subsystem {
 
   DifferentialDrive d_drive = new DifferentialDrive(d_left, d_right);
   public AHRS ahrs = new AHRS(SPI.Port.kMXP);
+  public boolean inverted = true;
 
   public double sineM = 0;
-  public WPI_TalonSRX arbitraryMotor = new WPI_TalonSRX(3);
 
   //drive = new RobotDrive(talon_fl, talon_bl, talon_fr, talon_br);
 
@@ -58,8 +58,8 @@ public class DriveSubsystem extends Subsystem {
     // directions match the robot's direction.
     victor_bl.follow(talon_fl);
     victor_br.follow(talon_fr);
-    d_left.setInverted(true);
-    d_right.setInverted(true);
+    d_left.setInverted(inverted);
+    d_right.setInverted(inverted);
 
     d_drive.setSafetyEnabled(false);
     // d_drive.setExpiration(0.75);
@@ -75,5 +75,10 @@ public class DriveSubsystem extends Subsystem {
     d_drive.curvatureDrive(xSpeed, zRotation, isQuickTurn);
   }
 
+  public void invertDirection() {
+    inverted = !inverted;
+    d_left.setInverted(inverted);
+    d_right.setInverted(inverted);
+  }
  
 }

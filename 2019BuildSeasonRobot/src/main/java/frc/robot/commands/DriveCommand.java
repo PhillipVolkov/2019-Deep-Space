@@ -32,7 +32,7 @@ public class DriveCommand extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    sineMovement += Math.PI / 200; //add pi/400 every time execute is called to simulate sin curve movement (temp)
+    //sineMovement += Math.PI / 200; //add pi/400 every time execute is called to simulate sin curve movement (temp)
     curveExecute();
   }
 
@@ -54,10 +54,6 @@ public class DriveCommand extends Command {
     // false);
 
     // Robot.m_drivesub.tankDrive(sineMovement, 0);
-  }
-
-  protected void curveReduced() {
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
