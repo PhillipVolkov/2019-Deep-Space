@@ -46,23 +46,23 @@ public class VisionSubsystem extends Subsystem {
 
   public VisionSubsystem() {
       
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    cvOutput = CameraServer.getInstance().putVideo("processed video", IMG_WIDTH, IMG_HEIGHT);
-    camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
-    camera.setFPS(25);
+  //   UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+  //   cvOutput = CameraServer.getInstance().putVideo("processed video", IMG_WIDTH, IMG_HEIGHT);
+  //   camera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+  //   camera.setFPS(25);
     
-    visionThread = new VisionThread(camera, pipe, pipeline -> {
-      if (!pipeline.filterContoursOutput().isEmpty()) {
-          Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
-          synchronized (imgLock) {
-              centerX = r.x + (r.width / 2);
+  //   visionThread = new VisionThread(camera, pipe, pipeline -> {
+  //     if (!pipeline.filterContoursOutput().isEmpty()) {
+  //         Rect r = Imgproc.boundingRect(pipeline.filterContoursOutput().get(0));
+  //         synchronized (imgLock) {
+  //             centerX = r.x + (r.width / 2);
               
-          }
-      }
-    });
+  //         }
+  //     }
+  //   });
     
-  visionThread.setDaemon(true);
-  visionThread.start();
+  // visionThread.setDaemon(true);
+  // visionThread.start();
   }
 
   
@@ -88,30 +88,30 @@ public class VisionSubsystem extends Subsystem {
 
   public void useSee() {
   
-      SmartDashboard.putString("debugging message,", "hello uwu :3");
-      CvSink cvSink = CameraServer.getInstance().getVideo();
-      // cvOutput = CameraServer.getInstance().putVideo("processed video", IMG_WIDTH, IMG_HEIGHT);
+      // SmartDashboard.putString("debugging message,", "hello uwu :3");
+      // CvSink cvSink = CameraServer.getInstance().getVideo();
+      // // cvOutput = CameraServer.getInstance().putVideo("processed video", IMG_WIDTH, IMG_HEIGHT);
      
-      Mat mat = new Mat();
+      // Mat mat = new Mat();
       
-    	if (cvSink.grabFrame(mat) == 0)
-    	{ 
-        SmartDashboard.putString("error", cvSink.getError());        
-    	}
-    	else
-    	{
+    	// if (cvSink.grabFrame(mat) == 0)
+    	// { 
+      //   SmartDashboard.putString("error", cvSink.getError());        
+    	// }
+    	// else
+    	// {
           
-        	GripPipeline grip = new GripPipeline();
-        	grip.process(mat);
-          //System.out.println(grip.filterContoursOutput().size());
-          SmartDashboard.putString("detect", "mat detected");
-          // cvOutput.putFrame(mat);
-          double turn = this.centerX - (IMG_WIDTH / 2);
-          SmartDashboard.putNumber("turn", turn);
-          // Robot.m_drivesub.curvatureDrive(0, turn*0.5, true);
+      //   	GripPipeline grip = new GripPipeline();
+      //   	grip.process(mat);
+      //     //System.out.println(grip.filterContoursOutput().size());
+      //     SmartDashboard.putString("detect", "mat detected");
+      //     // cvOutput.putFrame(mat);
+      //     double turn = this.centerX - (IMG_WIDTH / 2);
+      //     SmartDashboard.putNumber("turn", turn);
+      //     // Robot.m_drivesub.curvatureDrive(0, turn*0.5, true);
           
 
-    	}
+    	// }
   }
 }
   

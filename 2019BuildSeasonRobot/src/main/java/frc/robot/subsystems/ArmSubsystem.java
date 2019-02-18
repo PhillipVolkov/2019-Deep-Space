@@ -10,11 +10,14 @@ package frc.robot.subsystems;
 // import edu.wpi.first.hal.can.CANMessageNotAllowedException;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 import com.ctre.phoenix.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 /**
  * An example subsystem.  You can replace me with your own Subsystem.
@@ -23,8 +26,10 @@ public class ArmSubsystem extends Subsystem{
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private WPI_TalonSRX armR = new WPI_TalonSRX(4);
-  private WPI_TalonSRX armL = new WPI_TalonSRX(5);
+  private WPI_TalonSRX armR = new WPI_TalonSRX(RobotMap.arm_talon);
+  private WPI_VictorSPX armL = new WPI_VictorSPX(RobotMap.arm_victor);
+
+  private SpeedControllerGroup arm = new SpeedControllerGroup(armR, armL);
 
   private double kP = 0;
   private double kI;
@@ -33,22 +38,25 @@ public class ArmSubsystem extends Subsystem{
   public int kIzone;
   public double kPeakOutput;
   public boolean armToggle = false;
-
-  private PIDSource source;
-  private PIDOutput output;
-
-  private PIDController pidController = new PIDController(kP, kI, kD, source, output, 0);
+  private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-  }
-  public void setCruiseAndAcceleration(int accel, int cruise) {
+    armR.setSafetyEnabled(false);
+    armL.setInverted(false);
     armL.follow(armR);
-    armL.setInverted(true);
 
+    // armR.configVoltageCompSaturation(4);
+    // armR.configPeakOutputForward(0.125); 
+    //   // armR.configVoltageCompSaturation(0);
+    // // armL.configVoltageCompSaturation(4);
+    // armL.configPeakOutputForward(0.125);
+    // armL.set(0.125);
     
+  }
+  public void setCruiseAndAcceleration(int accel, int cruise) {  
     armR.config_kP(0, kP);
     armR.config_kI(0, kI);
     armR.config_kD(0, kD);
@@ -57,7 +65,7 @@ public class ArmSubsystem extends Subsystem{
     armR.configMotionCruiseVelocity(cruise);
   }
 
-  public void toggleArm(double turnPosition) {
+  /*public void toggleArm(double turnPosition) {
     if (armToggle == true) {
       armR.set(ControlMode.MotionMagic, turnPosition);
     } else {
@@ -65,10 +73,31 @@ public class ArmSubsystem extends Subsystem{
     }
 
     armToggle = !armToggle;
+  }*/
+
+  public void armUp(double turnPosition) {
+    armR.set(ControlMode.MotionMagic, turnPosition);
   }
 
+  public void armReset() {
+    armR.set(ControlMode.MotionMagic, 0);
+  }
+    // imagine hackeman//
   public void turnArm() {
-    armR.set(Robot.m_oi.getYMagnitudeOfRightSide());
+    armR.set(Robot.m_oi.getYMagnitudeOfRightSide() * 0.25);
+    // armR.setSafetyEnabled(true);
+    // armR.setExpiration(1);
+    /*SmartDashboard.putNumber("motor output voltage", armR.getMotorOutputVoltage());    
+    
+    SmartDashboard.putNumber("motor output voltage left", armL.getMotorOutputVoltage());    
+
+    SmartDashboard.putNumber("motor output current", armR.getOutputCurrent());    
+    SmartDashboard.putNumber("pdp current for talon", pdp.getCurrent(4)); 
+    SmartDashboard.putNumber("pdp current for victor", pdp.getCurrent(5)); 
+    
+    
+    // SmartDashboard.putNumber("motor output voltage left", armL.getOutp);   */
+
   }
 
 

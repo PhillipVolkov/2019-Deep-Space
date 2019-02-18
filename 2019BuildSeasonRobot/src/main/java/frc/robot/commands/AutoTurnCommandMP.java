@@ -25,7 +25,7 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
     private double target;
     private int stage;
     private double time;
-    public PIDController turnPID = new PIDController(0.0, 0.0, 0.0, this, this, 0.1);
+    public PIDController turnPID = new PIDController(0.0, 0.0, 0.0, this, this, 2665);
     private AHRS ahrs = Robot.m_drivesub.ahrs;
     private double rate;
     private double velocityError;
@@ -64,6 +64,7 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
     // @Override
     protected void initialize() {
         setPIDSourceType(PIDSourceType.kDisplacement);
+         turnPID.setInputRange(-1, 1);
         turnPID.setContinuous(true);
         turnPID.enable();
     }
@@ -73,6 +74,7 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
     protected void execute() {
         if(stage == 1)
         {
+            SmartDashboard.putString("stage 1", "stage 1");
             time += 1.0;
             currentVelocity = currentVelocity + (rampRate/50);
             turnPID.setSetpoint(currentVelocity);
@@ -83,6 +85,7 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
         }
         else if(stage == 2)
         {
+            SmartDashboard.putString("stage 2", "stage 2");
             time += 1.0;
             turnPID.setSetpoint(currentVelocity);
             if(time >= cruiseTicks + rampTicks)
@@ -92,6 +95,7 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
         }
         else if(stage == 3)
         {
+            SmartDashboard.putString("stage 3", "stage 3");
             time += 1.0;
             currentVelocity = currentVelocity - (rampRate/50);
             turnPID.setSetpoint(currentVelocity);
@@ -100,7 +104,9 @@ public class AutoTurnCommandMP extends Command implements PIDSource, PIDOutput {
                 stage = 4;
             }
         }
-        Robot.m_drivesub. curvatureDrive(0, velocityError, true);
+        SmartDashboard.putNumber("velError", velocityError);
+        SmartDashboard.putNumber("current angle", Robot.m_drivesub.ahrs.getAngle());
+        Robot.m_drivesub.curvatureDrive(0, (currentVelocity + velocityError), true);
 
     }
 

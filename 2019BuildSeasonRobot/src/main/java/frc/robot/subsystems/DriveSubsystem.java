@@ -61,7 +61,10 @@ public class DriveSubsystem extends Subsystem {
     d_left.setInverted(true);
     d_right.setInverted(true);
 
-    arbitraryMotor.follow(talon_fl);
+    d_drive.setSafetyEnabled(false);
+    // d_drive.setExpiration(0.75);
+
+    // arbitraryMotor.follow(talon_fl);
   }
   
   public void tankDrive(double leftSpeed, double rightSpeed) {

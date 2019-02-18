@@ -54,7 +54,7 @@ public class Robot extends TimedRobot {
   public static ArmCommand m_armcomm = new ArmCommand();
 
   public static AutoDriveCommand m_autodrivecomm = new AutoDriveCommand();
-  public static AutoTurnCommandMP m_autoturncomm = new AutoTurnCommandMP(90, 5, 0.1);
+  public static AutoTurnCommandMP m_autoturncomm = new AutoTurnCommandMP(180, 1, .1);
 
   public static OI m_oi;
 
@@ -158,11 +158,11 @@ public class Robot extends TimedRobot {
     m_drivecomm.start();
     //  m_viscomm.start();
 
-    m_intakecomm.start();
+    // m_intakecomm.start();
 
-    if (m_oi.contr.getYButtonPressed()) {
-    //  m_pncomm.execute();
-    }
+    // if (m_oi.contr.getYButtonPressed()) {
+    // //  m_pncomm.execute();
+    // }
     m_armcomm.start();
     
   }
